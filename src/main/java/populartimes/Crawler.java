@@ -63,6 +63,7 @@ public class Crawler {
         popularity.setPlace_id(googleMapResponse.getPlaceId());
         popularity.setPlace_name(googleMapResponse.getPlaceName());
         popularity.setTypes(googleMapResponse.getTypes());
+        popularity.setFormatted_address(googleMapResponse.getFormatedAddress());
         popularity.setRatings(rating);
         popularity.setRatings_n(rating_n);
         popularity.setPlace_info(place_info);
@@ -94,7 +95,7 @@ public class Crawler {
 
 
     private  String urlBuilder(String place_identifier) throws URISyntaxException {
-        String baseUrl = "https://www.google.com.tr/search?";
+        String baseUrl = "https://www.google.fr/search?";
         URIBuilder buildedUrl = new URIBuilder(baseUrl);
         buildedUrl.addParameter("tbm","map");
         buildedUrl.addParameter("tch","1");

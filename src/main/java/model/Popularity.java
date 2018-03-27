@@ -7,7 +7,7 @@ public class Popularity {
 
     private  String         place_id;
     private  String         place_name;
-    private  String         formated_address;
+    private  String         formatted_address;
     private  List<String>   types;
     private  int            ratings;
     private  int            ratings_n;
@@ -62,12 +62,12 @@ public class Popularity {
         this.populartimes = populartimes;
     }
 
-    public String getFormated_address() {
-        return formated_address;
+    public String getFormatted_address() {
+        return formatted_address;
     }
 
-    public void setFormated_address(String formated_address) {
-        this.formated_address = formated_address;
+    public void setFormatted_address(String formatted_address) {
+        this.formatted_address = formatted_address;
     }
 
     public String getPlace_info() {
