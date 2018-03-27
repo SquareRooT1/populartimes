@@ -12,6 +12,7 @@ public class Popularity {
     private  int            ratings;
     private  int            ratings_n;
     private  Map <String, int[]> populartimes;
+    private  String         place_info;
 
     public String getPlace_id() {
         return place_id;
@@ -67,5 +68,13 @@ public class Popularity {
 
     public void setFormated_address(String formated_address) {
         this.formated_address = formated_address;
+    }
+
+    public String getPlace_info() {
+        return place_info;
+    }
+
+    public void setPlace_info(String place_info) {
+        this.place_info = place_info;
     }
 }

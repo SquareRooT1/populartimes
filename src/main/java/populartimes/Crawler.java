@@ -23,19 +23,32 @@ public class Crawler {
     }
 
     private String getPlaceIdentifier (String placeId, String apiKey){
-        String URL = String.format(Constants.URL_GOOGLE_MAP, placeId, apiKey);
-        googleMapResponse = new HttpRequest < GoogleMapResponse >().request(URL, GoogleMapResponse.class);
-        return googleMapResponse.getPlaceIdentifier();
+        try{
+            String URL = String.format(Constants.URL_GOOGLE_MAP, placeId, apiKey);
+            googleMapResponse = new HttpRequest < GoogleMapResponse >().request(URL, GoogleMapResponse.class);
+            return googleMapResponse.getPlaceIdentifier();
+        }catch (Exception e){
+            System.out.println(e.getMessage());
+            return null;
+        }
+
     }
 
     private String getPlacePopularity(String placeIdentifier) throws URISyntaxException {
-        GooglePlacesResponse placesResponse = new HttpRequest<GooglePlacesResponse>().request(urlBuilder(placeIdentifier), GooglePlacesResponse.class);
-        JsonArray info = getPopularityArray(placesResponse);
-        Map<String, int[]> populartimes = getPopularityForWeek(info.get(84).getAsJsonArray().get(0).getAsJsonArray());
-        JsonArray ratingArray = info.get(4).getAsJsonArray();
-        int rating   = ratingArray.get(7).getAsInt();
-        int rating_n = ratingArray.get(8).getAsInt();
-        return generateJson(setPopularity(populartimes, rating, rating_n));
+        try{
+            GooglePlacesResponse placesResponse = new HttpRequest<GooglePlacesResponse>().request(urlBuilder(placeIdentifier), GooglePlacesResponse.class);
+            JsonArray info = getPopularityArray(placesResponse);
+            Map<String, int[]> populartimes = getPopularityForWeek(info.get(84).getAsJsonArray().get(0).getAsJsonArray());
+            //TODO null check
+            JsonArray ratingArray = info.get(4).getAsJsonArray();
+            String place_info = info.get(117).getAsJsonArray().get(0).getAsString();
+            int rating   = ratingArray.get(7).getAsInt();
+            int rating_n = ratingArray.get(8).getAsInt();
+            return generateJson(setPopularity(populartimes, rating, rating_n, place_info));
+        }catch (Exception e){
+            System.out.println(e.getMessage());
+        }
+        return null;
     }
 
     private  JsonArray getPopularityArray(GooglePlacesResponse placesResponse) {
@@ -44,7 +57,7 @@ public class Crawler {
         return arrayFromString.get(0).getAsJsonArray().get(1).getAsJsonArray().get(0).getAsJsonArray().get(14).getAsJsonArray();
     }
 
-    private Popularity setPopularity(Map<String, int[]> populartimes, int rating, int rating_n){
+    private Popularity setPopularity(Map<String, int[]> populartimes, int rating, int rating_n, String place_info){
         Popularity popularity = new Popularity();
         popularity.setPopulartimes(populartimes);
         popularity.setPlace_id(googleMapResponse.getPlaceId());
@@ -52,6 +65,7 @@ public class Crawler {
         popularity.setTypes(googleMapResponse.getTypes());
         popularity.setRatings(rating);
         popularity.setRatings_n(rating_n);
+        popularity.setPlace_info(place_info);
 
         return popularity;
     }
@@ -74,14 +88,13 @@ public class Crawler {
                visitors[popularities.get(0).getAsInt()] = popularities.get(1).getAsInt();
             }
             dailyPopularities.put(dayName,visitors);
-
         }
         return dailyPopularities;
     }
 
 
     private  String urlBuilder(String place_identifier) throws URISyntaxException {
-        String baseUrl = "https://www.google.de/search?";
+        String baseUrl = "https://www.google.com.tr/search?";
         URIBuilder buildedUrl = new URIBuilder(baseUrl);
         buildedUrl.addParameter("tbm","map");
         buildedUrl.addParameter("tch","1");
