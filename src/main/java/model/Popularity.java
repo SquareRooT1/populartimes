@@ -1,33 +1,45 @@
 package model;
 
+import com.fasterxml.jackson.annotation.JsonProperty;
+
 import java.util.List;
 import java.util.Map;
 
 public class Popularity {
-
-    private  String         place_id;
-    private  String         place_name;
-    private  String         formatted_address;
+    @JsonProperty("place_id")
+    private  String         placeId;
+    @JsonProperty("place_name")
+    private  String         placeName;
+    @JsonProperty("formatted_address")
+    private  String         formattedAddress;
+    @JsonProperty("types")
     private  List<String>   types;
+    @JsonProperty("ratings")
     private  int            ratings;
-    private  int            ratings_n;
+    @JsonProperty("ratings_n")
+    private  int            ratingsN;
+    @JsonProperty("populartimes")
     private  Map <String, int[]> populartimes;
-    private  String         place_info;
+    @JsonProperty("place_info")
+    private  String         placeInfo;
+    @JsonProperty("reviews")
+    private  List<Reviews>  reviews;
 
-    public String getPlace_id() {
-        return place_id;
+
+    public String getPlaceId() {
+        return placeId;
     }
 
-    public void setPlace_id(String place_id) {
-        this.place_id = place_id;
+    public void setPlaceId(String placeId) {
+        this.placeId = placeId;
     }
 
-    public String getPlace_name() {
-        return place_name;
+    public String getPlaceName() {
+        return placeName;
     }
 
-    public void setPlace_name(String place_name) {
-        this.place_name = place_name;
+    public void setPlaceName(String placeName) {
+        this.placeName = placeName;
     }
 
     public List<String> getTypes() {
@@ -46,12 +58,12 @@ public class Popularity {
         this.ratings = ratings;
     }
 
-    public int getRatings_n() {
-        return ratings_n;
+    public int getRatingsN() {
+        return ratingsN;
     }
 
-    public void setRatings_n(int ratings_n) {
-        this.ratings_n = ratings_n;
+    public void setRatingsN(int ratingsN) {
+        this.ratingsN = ratingsN;
     }
 
     public Map<String, int[]> getPopulartimes() {
@@ -62,19 +74,27 @@ public class Popularity {
         this.populartimes = populartimes;
     }
 
-    public String getFormatted_address() {
-        return formatted_address;
+    public String getFormattedAddress() {
+        return formattedAddress;
     }
 
-    public void setFormatted_address(String formatted_address) {
-        this.formatted_address = formatted_address;
+    public void setFormattedAddress(String formattedAddress) {
+        this.formattedAddress = formattedAddress;
     }
 
-    public String getPlace_info() {
-        return place_info;
+    public String getPlaceInfo() {
+        return placeInfo;
     }
 
-    public void setPlace_info(String place_info) {
-        this.place_info = place_info;
+    public void setPlaceInfo(String placeInfo) {
+        this.placeInfo = placeInfo;
+    }
+
+    public List<Reviews> getReviews() {
+        return reviews;
+    }
+
+    public void setReviews(List<Reviews> reviews) {
+        this.reviews = reviews;
     }
 }

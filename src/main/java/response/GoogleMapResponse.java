@@ -2,6 +2,7 @@ package response;
 
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.JsonProperty;
+import model.Reviews;
 
 import java.lang.reflect.Array;
 import java.util.List;
@@ -15,6 +16,7 @@ public class GoogleMapResponse {
     private String placeId;
     private List<String> types;
     private Map<String, Double> coordinates;
+    private List<Reviews> reviews;
 
     @JsonProperty("result")
     private void mapPlaceIdentifier(Map<String, Object> result) {
@@ -23,10 +25,12 @@ public class GoogleMapResponse {
             this.placeName          = (String) result.getOrDefault("name", null);
             this.placeId            = (String) result.getOrDefault("place_id", null);
             this.types              = (List<String>) result.getOrDefault("types",null);
+            this.reviews            = (List<Reviews>) result.getOrDefault("reviews", null);
         } catch (Exception e) {
             System.out.println(e.getMessage());
         }
     }
+
 
     public String getPlaceIdentifier(){
         return placeName + " " + formatedAddress;
@@ -50,5 +54,9 @@ public class GoogleMapResponse {
 
     public Map<String, Double> getCoordinates() {
         return coordinates;
+    }
+
+    public List<Reviews> getReviews() {
+        return reviews;
     }
 }

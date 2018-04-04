@@ -1,16 +1,21 @@
 package populartimes;
 
+import com.fasterxml.jackson.core.JsonFactory;
+import com.fasterxml.jackson.core.JsonProcessingException;
+import com.fasterxml.jackson.databind.JsonNode;
+import com.fasterxml.jackson.databind.util.JSONPObject;
 import com.google.gson.*;
 import model.Popularity;
 import org.apache.http.client.utils.URIBuilder;
 import response.GoogleMapResponse;
 import response.GooglePlacesResponse;
 import util.Constants;
+import util.GlobalUtil;
 import util.HttpRequest;
 
-import java.io.UnsupportedEncodingException;
 import java.net.URISyntaxException;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 public class Crawler {
@@ -41,15 +46,17 @@ public class Crawler {
             Map<String, int[]> populartimes = getPopularityForWeek(info.get(84).getAsJsonArray().get(0).getAsJsonArray());
             //TODO null check
             JsonArray ratingArray = info.get(4).getAsJsonArray();
-            String place_info = info.get(117).getAsJsonArray().get(0).getAsString();
+            String placeInfo = info.get(117).getAsJsonArray().get(0).getAsString();
             int rating   = ratingArray.get(7).getAsInt();
-            int rating_n = ratingArray.get(8).getAsInt();
-            return generateJson(setPopularity(populartimes, rating, rating_n, place_info));
+            int ratingN = ratingArray.get(8).getAsInt();
+            return generateJson(setPopularity(populartimes, rating, ratingN, placeInfo));
         }catch (Exception e){
             System.out.println(e.getMessage());
         }
         return null;
     }
+
+
 
     private  JsonArray getPopularityArray(GooglePlacesResponse placesResponse) {
         JsonParser jsonParser = new JsonParser();
@@ -57,23 +64,29 @@ public class Crawler {
         return arrayFromString.get(0).getAsJsonArray().get(1).getAsJsonArray().get(0).getAsJsonArray().get(14).getAsJsonArray();
     }
 
-    private Popularity setPopularity(Map<String, int[]> populartimes, int rating, int rating_n, String place_info){
+    private Popularity setPopularity(Map<String, int[]> populartimes, int rating, int ratingN, String placeInfo){
         Popularity popularity = new Popularity();
         popularity.setPopulartimes(populartimes);
-        popularity.setPlace_id(googleMapResponse.getPlaceId());
-        popularity.setPlace_name(googleMapResponse.getPlaceName());
+        popularity.setPlaceId(googleMapResponse.getPlaceId());
+        popularity.setPlaceName(googleMapResponse.getPlaceName());
         popularity.setTypes(googleMapResponse.getTypes());
-        popularity.setFormatted_address(googleMapResponse.getFormatedAddress());
+        popularity.setFormattedAddress(googleMapResponse.getFormatedAddress());
+        popularity.setReviews(googleMapResponse.getReviews());
         popularity.setRatings(rating);
-        popularity.setRatings_n(rating_n);
-        popularity.setPlace_info(place_info);
+        popularity.setRatingsN(ratingN);
+        popularity.setPlaceInfo(placeInfo);
 
         return popularity;
     }
 
     private String generateJson(Popularity popularities){
-        Gson gsonBuilder = new GsonBuilder().create();
-        String jsonResult = gsonBuilder.toJson(popularities);
+        String jsonResult = null;
+        try {
+            jsonResult = GlobalUtil.MAPPER.writeValueAsString(popularities);
+        } catch (JsonProcessingException e) {
+            System.out.println(e.getMessage());//Todo add logger
+            return null;
+        }
 
         return jsonResult;
     }
