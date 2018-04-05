@@ -7,23 +7,26 @@ import java.util.Map;
 
 public class Popularity {
     @JsonProperty("place_id")
-    private  String         placeId;
+    private String placeId;
     @JsonProperty("place_name")
-    private  String         placeName;
+    private String placeName;
     @JsonProperty("formatted_address")
-    private  String         formattedAddress;
+    private String formattedAddress;
     @JsonProperty("types")
-    private  List<String>   types;
+    private List<String> types;
     @JsonProperty("ratings")
-    private  int            ratings;
+    private int ratings;
     @JsonProperty("ratings_n")
-    private  int            ratingsN;
+    private int ratingsN;
     @JsonProperty("populartimes")
-    private  Map <String, int[]> populartimes;
+    private Map<String, int[]> populartimes;
     @JsonProperty("place_info")
-    private  String         placeInfo;
+    private String placeInfo;
     @JsonProperty("reviews")
-    private  List<Reviews>  reviews;
+    private List<Reviews> reviews;
+    @JsonProperty("live")
+    private Live live;
+
 
 
     public String getPlaceId() {
@@ -96,5 +99,13 @@ public class Popularity {
 
     public void setReviews(List<Reviews> reviews) {
         this.reviews = reviews;
+    }
+
+    public Live getLive() {
+        return live;
+    }
+
+    public void setLive(Live live) {
+        this.live = live;
     }
 }
